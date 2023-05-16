@@ -3,8 +3,8 @@ module RubyOpenAI
     attr_reader :client, :model
 
     def initialize(client, model)
-      client = client
-      model = model
+      @client = client
+      @model = model
     end
   
     def get_response(required_params, options = {})

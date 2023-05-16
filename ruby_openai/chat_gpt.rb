@@ -3,8 +3,8 @@ module RubyOpenAI
     attr_reader :client, :model
 
     def initialize(client, model)
-      client = client
-      model = model
+      @client = client
+      @model = model
     end
   
     def get_response(required_params, options = { temperature: 0.7 })
@@ -19,7 +19,7 @@ module RubyOpenAI
     def add_parameters(required_params, options)
       parameters = {
         model: self.model,
-        messages: required_params[:messages]
+        messages: required_params[:messages],
         temperature: options[:temperature]
       }
     end
