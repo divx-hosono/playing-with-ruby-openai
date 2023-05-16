@@ -1,17 +1,29 @@
 module RubyOpenAI
   class ChatGPT
-    def initialize
+    attr_reader :client, :model
+
+    def initialize(client, model)
+      client = client
+      model = model
     end
   
-    def get_response(client)
+    def get_response(required_params, options = {})
       response = client.chat(
-        parameters: {
-          model: "gpt-3.5-turbo", # Required.
-          messages: [{ role: "user", content: "Hello!"}], # Required.
-          temperature: 0.7,
-        }
+        parameters: add_parameters(required_params, options)
       )
       response
+    end
+
+    private
+
+    def add_parameters(required_params, options)
+      parameters = {
+        model: self.model,
+        messages: required_params[:messages]
+      }
+      if options[:temperature].present?
+        parameters[:temperature] = options[:temperature]
+      end
     end
   end
 end

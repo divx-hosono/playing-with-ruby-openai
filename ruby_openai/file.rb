@@ -1,9 +1,18 @@
 module RubyOpenAI
   class File
-    def initialize
+    attr_reader :client, :model
+
+    def initialize(client, model)
+      client = client
+      model = model
+    end
+  
+    def get_response(required_params, options = {})
     end
 
-    def get_response(client)
+    private
+
+    def add_parameters(model, messages, options = {})
     end
   end
 end
