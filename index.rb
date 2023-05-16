@@ -10,5 +10,14 @@ require_relative './ruby_openai/moderation.rb'
 require_relative './ruby_openai/transcribe.rb'
 require_relative './ruby_openai/translate.rb'
 
+# 言語モデルのバージョン
+MODEL_VERSION = "gpt-3.5-turbo"
+
 # ここにユーザーインターフェイスを書く
 client = OpenAI::Client.new
+
+# CHAT GPTを使用する場合（サンプル）
+chat_gpt = RubyOpenAI::ChatGPT.new(client, MODEL_VERSION)
+response = chat_gpt.get_response(messages: [{ role: "user", content: "Hello!"}])
+
+puts response

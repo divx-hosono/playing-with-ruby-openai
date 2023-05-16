@@ -3,8 +3,9 @@ module RubyOpenAI
   class Embedding
     attr_reader :client, :model
 
-    def initialize(client)
-      client = client
+    def initialize(client, model)
+      @client = client
+      @model = model
     end
   
     def get_response(required_params, options = {})
