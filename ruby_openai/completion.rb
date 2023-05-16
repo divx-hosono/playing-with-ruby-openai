@@ -17,7 +17,7 @@ module RubyOpenAI
     private
 
     def add_parameters(required_params, options)
-      parameters: {
+      parameters ={
         model: self.model,
         prompt: required_params[:prompt],
         max_tokens: options[:max_tokens]

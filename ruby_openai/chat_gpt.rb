@@ -7,11 +7,11 @@ module RubyOpenAI
       model = model
     end
   
-    def get_response(required_params, options = {})
+    def get_response(required_params, options = { temperature: 0.7 })
       response = client.chat(
         parameters: add_parameters(required_params, options)
       )
-      response
+      response.dig("choices", 0, "message", "content")
     end
 
     private
@@ -20,10 +20,8 @@ module RubyOpenAI
       parameters = {
         model: self.model,
         messages: required_params[:messages]
+        temperature: options[:temperature]
       }
-      if options[:temperature].present?
-        parameters[:temperature] = options[:temperature]
-      end
     end
   end
 end

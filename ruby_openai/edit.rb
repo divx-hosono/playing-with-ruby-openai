@@ -17,7 +17,7 @@ module RubyOpenAI
     private
 
     def add_parameters(required_params, options)
-      parameters: {
+      parameters = {
         model: self.model,
         input: required_params[:input],
         instruction: required_params[:instruction]

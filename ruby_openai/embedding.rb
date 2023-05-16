@@ -12,7 +12,7 @@ module RubyOpenAI
 
     private
 
-    def add_parameters(required_params options)
+    def add_parameters(required_params, options)
     end
   end
 end
