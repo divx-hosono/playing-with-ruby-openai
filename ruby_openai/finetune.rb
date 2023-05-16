@@ -6,13 +6,22 @@ module RubyOpenAI
       client = client
       model = model
     end
-  
+
     def get_response(required_params, options = {})
+      file_id = File.get_response(required_params)
+      response = client.finetunes.create(
+        parameters: add_parameters(file_id, options)
+      )
+      response
     end
 
     private
 
-    def add_parameters(required_params, options)
+    def add_parameters(file_id, options)
+      parameters = {
+        training_file: file_id,
+        model: self.model
+      }
     end
   end
 end

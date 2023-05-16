@@ -8,11 +8,20 @@ module RubyOpenAI
     end
   
     def get_response(required_params, options = {})
+      response = client.files.upload(
+        parameters: add_parameters(required_params, options)
+      )
+      file_id = JSON.parse(response.body)["id"]
+      file_id
     end
 
     private
 
-    def add_parameters(model, messages, options = {})
+    def add_parameters(model, messages, options)
+      parameters = {
+        file: required_params[:file],
+        purpose: required_params[:purpose]
+      }
     end
   end
 end
