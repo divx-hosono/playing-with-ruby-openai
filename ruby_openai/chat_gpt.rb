@@ -8,6 +8,7 @@ module RubyOpenAI
     end
   
     def get_response(required_params, options = { temperature: 0.7 })
+      required_params[:messages] = optimization_prompt(required_params[:messages])
       response = client.chat(
         parameters: add_parameters(required_params, options)
       )
@@ -15,6 +16,10 @@ module RubyOpenAI
     end
 
     private
+
+    def optimization_prompt
+      # TODO: Add optimization prompt
+    end
 
     def add_parameters(required_params, options)
       parameters = {
