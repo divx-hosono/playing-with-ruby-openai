@@ -53,6 +53,16 @@ class SampleCLI < Thor
     puts response
   end
 
+  desc "moderation", "Moderation API"
+  def moderation
+    puts "Please input your message."
+    input = STDIN.gets.chomp
+    client = OpenAI::Client.new
+    moderation = RubyOpenAI::Moderation.new(client, model_version)
+    response = moderation.get_response(input: input)
+    puts response
+  end
+
   private
 
   def client
