@@ -10,7 +10,8 @@ module RubyOpenAI
     def get_response(required_params, options = {})
       response = client.edits(
         parameters: add_parameters(required_params, options)
-      )
+      ).dig("choices", 0, "text")
+
       response
     end
 
