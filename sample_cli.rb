@@ -9,12 +9,12 @@ class SampleCLI < Thor
   def chat
     puts "Please input your message."
     chat_gpt = RubyOpenAI::ChatGPT.new(client, model_version)
-    response = chat_gpt.get_response(messages: [{ role: "user", content: input_message}])
+    response = chat_gpt.get_response(messages: [{ role: "user", content: gets_chomp}])
     puts response
     while retry? do
       puts "Please input your message."
-      input = input_message
-      response = chat_gpt.get_response(messages: [{ role: "user", content: input_message}])
+      input = gets_chomp
+      response = chat_gpt.get_response(messages: [{ role: "user", content: gets_chomp}])
       puts response
     end
     thanks_message
@@ -24,10 +24,10 @@ class SampleCLI < Thor
   def completion
     puts "Please input your message."
     completion = RubyOpenAI::Completion.new(client, model_version("text-davinci-001"))
-    response = completion.get_response(prompt: input_message)
+    response = completion.get_response(prompt: gets_chomp)
     while retry? do
       puts "Please input your message."
-      input = input_message
+      input = gets_chomp
       response = completion.get_response(prompt: input)
       puts response
     end
@@ -38,9 +38,9 @@ class SampleCLI < Thor
   def edit
     puts "Please input your message."
     edit = RubyOpenAI::Edit.new(client, model_version("text-davinci-edit-001"))
-    input = input_message
+    input = gets_chomp
     puts "Please input your instruction."
-    instruction = input_message
+    instruction = gets_chomp
     response = edit.get_response(input: input, instruction: instruction)
     puts response
     thanks_message
@@ -50,8 +50,7 @@ class SampleCLI < Thor
   def embedding
     puts "Please input your message."
     embedding = RubyOpenAI::Embedding.new(client, model_version("text-embedding-ada-002"))
-    input = input_message
-    response = embedding.get_response(input: input)
+    response = embedding.get_response(input: gets_chomp)
     puts response
     thanks_message
   end
@@ -111,13 +110,13 @@ class SampleCLI < Thor
     puts "Thank you for using our service."
   end
 
-  def input_message
+  def gets_chomp
     STDIN.gets.chomp
   end
 
   def retry?
     puts "Would you like to try again? (y/n)"
-    case input_message
+    case gets_chomp
     when "y"
       true
     when "n"
