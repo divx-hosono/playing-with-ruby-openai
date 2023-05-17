@@ -17,7 +17,6 @@ class SampleCLI < Thor
       response = chat_gpt.get_response(messages: [{ role: "user", content: gets_chomp}])
       puts response
     end
-    thanks_message
   end
 
   desc "completion", "Completion API"
@@ -31,7 +30,6 @@ class SampleCLI < Thor
       response = completion.get_response(prompt: input)
       puts response
     end
-    thanks_message
   end
 
   desc "edit", "Edit API"
@@ -43,7 +41,6 @@ class SampleCLI < Thor
     instruction = gets_chomp
     response = edit.get_response(input: input, instruction: instruction)
     puts response
-    thanks_message
   end
 
   desc "embedding", "Embedding API"
@@ -52,7 +49,6 @@ class SampleCLI < Thor
     embedding = RubyOpenAI::Embedding.new(client, model_version("text-embedding-ada-002"))
     response = embedding.get_response(input: gets_chomp)
     puts response
-    thanks_message
   end
 
   desc "image", "Image API"
@@ -106,10 +102,6 @@ class SampleCLI < Thor
     model_version = model_version
   end
 
-  def thanks_message
-    puts "Thank you for using our service."
-  end
-
   def gets_chomp
     STDIN.gets.chomp
   end
@@ -128,4 +120,6 @@ class SampleCLI < Thor
   end
 end
 
+puts "Welcome to Sample CLI."
 SampleCLI.start(ARGV)
+puts "Thank you for using our service."
