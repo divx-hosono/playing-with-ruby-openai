@@ -13,17 +13,54 @@ require_relative './ruby_openai/translate.rb'
 
 
 class SampleCLI < Thor
-  # 言語モデルのバージョン
-  MODEL_VERSION = "gpt-3.5-turbo"
-
   desc "chat", "ChatGPT API"
   def chat
     puts "Please input your message."
-    input = STDIN.gets.chomp
-    client = OpenAI::Client.new
-    chat_gpt = RubyOpenAI::ChatGPT.new(client, MODEL_VERSION)
-    response = chat_gpt.get_response(messages: [{ role: "user", content: input}])
+    chat_gpt = RubyOpenAI::ChatGPT.new(client, model_version)
+    response = chat_gpt.get_response(messages: [{ role: "user", content: input_message}])
     puts response
+  end
+
+  desc "completion", "Completion API"
+  def completion
+    puts "Please input your message."
+    completion = RubyOpenAI::Completion.new(client, model_version("text-davinci-001"))
+    completion.get_response(prompt: input_message)
+    while retry? do
+      input = input_message
+      completion.get_response(prompt: input)
+    end
+    after_message
+  end
+
+  private
+
+  def client
+    OpenAI::Client.new
+  end
+
+  def model_version(model_version = "gpt-3.5-turbo")
+    model_version = model_version
+  end
+
+  def after_message
+    puts "Thank you for using our service."
+  end
+
+  def input_message
+    STDIN.gets.chomp
+  end
+
+  def retry?
+    puts "Would you like to try again? (y/n)"
+    case input_message
+    when "y"
+      true
+    when "n"
+      false
+    else
+      puts "Please enter y or n."
+    end
   end
 end
 

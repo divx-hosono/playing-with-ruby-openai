@@ -6,10 +6,6 @@ module RubyOpenAI
       @client = client
       @model = model
     end
-  
-    def optimization_prompt(message)
-      message
-    end
 
     def get_response(required_params, options = { temperature: 0.7 })
       response = client.chat(
