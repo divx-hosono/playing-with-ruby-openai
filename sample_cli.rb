@@ -14,28 +14,53 @@ require_relative './ruby_openai/translate.rb'
 class SampleCLI < Thor
   desc "chat", "ChatGPT API"
   def chat
-    prompt_message
+    puts "Please input your message."
     chat_gpt = RubyOpenAI::ChatGPT.new(client, model_version)
     response = chat_gpt.get_response(messages: [{ role: "user", content: input_message}])
     puts response
+    while retry? do
+      puts "Please input your message."
+      input = input_message
+      response = chat_gpt.get_response(messages: [{ role: "user", content: input_message}])
+      puts response
+    end
+    thanks_message
   end
 
   desc "completion", "Completion API"
   def completion
-    prompt_message
+    puts "Please input your message."
     completion = RubyOpenAI::Completion.new(client, model_version("text-davinci-001"))
-    completion.get_response(prompt: input_message)
+    response = completion.get_response(prompt: input_message)
     while retry? do
-      prompt_message
+      puts "Please input your message."
       input = input_message
-      completion.get_response(prompt: input)
+      response = completion.get_response(prompt: input)
+      puts response
     end
     thanks_message
   end
 
   desc "edit", "Edit API"
   def edit
+    puts "Please input your message."
+    edit = RubyOpenAI::Edit.new(client, model_version("text-davinci-edit-001"))
+    input = input_message
+    puts "Please input your instruction."
+    instruction = input_message
+    response = edit.get_response(input: input, instruction: instruction)
+    puts response
+    thanks_message
+  end
 
+  desc "embedding", "Embedding API"
+  def embedding
+    puts "Please input your message."
+    embedding = RubyOpenAI::Embedding.new(client, model_version("text-embedding-ada-002"))
+    input = input_message
+    response = embedding.get_response(input: input)
+    puts response
+    thanks_message
   end
 
   desc "file", "File API"
@@ -63,7 +88,7 @@ class SampleCLI < Thor
     puts "Please input image you wish to generate."
     input = STDIN.gets.chomp
     client = OpenAI::Client.new
-    image = RubyOpenAI::Image.new(client, model_version)
+    image = RubyOpenAI::Image.new(client, model_version("babbage-similarity"))
     response = image.get_response(prompt: input)
     puts response
   end
@@ -107,10 +132,6 @@ class SampleCLI < Thor
 
   def model_version(model_version = "gpt-3.5-turbo")
     model_version = model_version
-  end
-
-  def prompt_message
-    puts "Please input your message."
   end
 
   def thanks_message

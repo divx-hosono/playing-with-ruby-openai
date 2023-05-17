@@ -10,8 +10,7 @@ module RubyOpenAI
     def get_response(required_params, options = { max_tokens: 5 })
       response = client.completions(
         parameters: add_parameters(required_params, options)
-      )
-      puts response["choices"].map { |c| c["text"] }
+      )["choices"].map { |c| c["text"] }
     end
 
     private

@@ -12,7 +12,6 @@ module RubyOpenAI
       response = client.embeddings(
         parameters: add_parameters(required_params, options)
       )
-      response
     end
 
     private
