@@ -38,6 +38,26 @@ class SampleCLI < Thor
 
   end
 
+  desc "file", "File API"
+  def file
+    puts "Please input the path to the json file."
+    input = STDIN.gets.chomp
+    client = OpenAI::Client.new
+    file = RubyOpenAI::File.new(client, model_version("ada"))
+    response = file.get_response(file: input, purpose: "fine-tune")
+    puts response
+  end
+
+  desc "finetune", "FineTune API"
+  def finetune
+    puts "Please input the path to the json file for fine tuning."
+    input = STDIN.gets.chomp
+    client = OpenAI::Client.new
+    finetune = RubyOpenAI::FineTune.new(client, model_version("ada"))
+    response = finetune.get_response(file: input, purpose: "fine-tune")
+    puts response
+  end
+
   desc "image", "Image API"
   def image
     puts "Please input image you wish to generate."

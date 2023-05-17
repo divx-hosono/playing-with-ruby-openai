@@ -11,13 +11,14 @@ module RubyOpenAI
       response = client.files.upload(
         parameters: add_parameters(required_params, options)
       )
-      file_id = JSON.parse(response.body)["id"]
+      # TODO: 公式の形と異なるので確認する（公式：JSON.parse(response.body)["id"]）
+      file_id = response["id"]
       file_id
     end
 
     private
 
-    def add_parameters(model, messages, options)
+    def add_parameters(required_params, options)
       parameters = {
         file: required_params[:file],
         purpose: required_params[:purpose]

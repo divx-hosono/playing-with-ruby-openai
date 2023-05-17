@@ -8,7 +8,8 @@ module RubyOpenAI
     end
 
     def get_response(required_params, options = {})
-      file_id = File.get_response(required_params)
+      file = RubyOpenAI::File.new(client, "ada")
+      file_id = file.get_response(required_params)
       response = client.finetunes.create(
         parameters: add_parameters(file_id, options)
       )
