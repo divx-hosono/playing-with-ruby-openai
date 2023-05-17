@@ -39,7 +39,7 @@ class SampleCLI < Thor
     input = STDIN.gets.chomp
     client = OpenAI::Client.new
     transcribe = RubyOpenAI::Transcribe.new(client, model_version("whisper-1"))
-    response = transcribe.get_response({file: input, extension: "rb"})
+    response = transcribe.get_response(file: input, extension: "rb")
     puts response
   end
 
@@ -49,7 +49,7 @@ class SampleCLI < Thor
     input = STDIN.gets.chomp
     client = OpenAI::Client.new
     translate = RubyOpenAI::Translate.new(client, model_version("whisper-1"))
-    response = translate.get_response({file: input, extension: "rb"})
+    response = translate.get_response(file: input, extension: "rb")
     puts response
   end
 
