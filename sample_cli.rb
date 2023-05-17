@@ -85,12 +85,48 @@ class SampleCLI < Thor
 
   desc "image", "Image API"
   def image
-    puts "Please input image you wish to generate."
-    input = STDIN.gets.chomp
-    client = OpenAI::Client.new
-    image = RubyOpenAI::Image.new(client, model_version("babbage-similarity"))
-    response = image.get_response(prompt: input)
-    puts response
+    puts "plese select the image processing you wish to perform"
+    puts "1: Generation"
+    puts "2: Edit"
+    puts "3: Variations"
+    input_processing = STDIN.gets.chomp
+    
+    case input_processing
+    when "1"
+      puts "Please input image you wish to generate."
+      input = STDIN.gets.chomp
+      client = OpenAI::Client.new
+      image = RubyOpenAI::Image.new(client, model_version("babbage-similarity"))
+      response = image.generate(prompt: input)
+      puts response
+    when "2"
+      # TODO: マスクを入力しないとダメらしい
+      # https://platform.openai.com/docs/guides/images/usage
+      puts "Please input image you wish to edit."
+      input_prompt = STDIN.gets.chomp
+      puts "Please input image file."
+      input_image_file = STDIN.gets.chomp
+      puts "Please input mask file path, if any."
+      input_mask_file = STDIN.gets.chomp
+        if input_mask_file == ""
+          input_mask_file = false
+        end
+      client = OpenAI::Client.new
+      image = RubyOpenAI::Image.new(client, model_version("babbage-similarity"))
+      response = image.edit(prompt: input_prompt, image: input_image_file, mask: input_mask_file)
+      puts response
+    when "3"
+      puts "Please input image file."
+      input_image_file = STDIN.gets.chomp
+      puts "Please input the number of images you wish to generate."
+      input_number = STDIN.gets.chomp.to_i
+      client = OpenAI::Client.new
+      image = RubyOpenAI::Image.new(client, model_version("babbage-similarity"))
+      response = image.variations(image: input_image_file, n: input_number)
+      puts response
+    else
+      puts "Please input 1, 2 or 3."
+    end
   end
 
   desc "moderation", "Moderation API"
