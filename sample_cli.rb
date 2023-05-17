@@ -15,13 +15,14 @@ require_relative './ruby_openai/translate.rb'
 class SampleCLI < Thor
   # 言語モデルのバージョン
   MODEL_VERSION = "gpt-3.5-turbo"
-  @client = OpenAI::Client.new
 
   desc "chat", "ChatGPT API"
   def chat
-    chat_gpt = RubyOpenAI::ChatGPT.new(@client, MODEL_VERSION)
-    chat_gpt.optimization_prompt("Hello, I'm a chatbot")
-    response = chat_gpt.get_response(messages: [{ role: "user", content: "Hello!"}])
+    puts "Please input your message."
+    input = STDIN.gets.chomp
+    client = OpenAI::Client.new
+    chat_gpt = RubyOpenAI::ChatGPT.new(client, MODEL_VERSION)
+    response = chat_gpt.get_response(messages: [{ role: "user", content: input}])
     puts response
   end
 end
