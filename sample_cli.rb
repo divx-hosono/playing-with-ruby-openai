@@ -38,6 +38,16 @@ class SampleCLI < Thor
 
   end
 
+  desc "moderation", "Moderation API"
+  def moderation
+    puts "Please input your message."
+    input = STDIN.gets.chomp
+    client = OpenAI::Client.new
+    moderation = RubyOpenAI::Moderation.new(client, model_version)
+    response = moderation.get_response(input: input)
+    puts response
+  end
+
   desc "transcribe", "Transcribe API"
   def transcribe
     puts "Please input audio file path."
@@ -55,16 +65,6 @@ class SampleCLI < Thor
     client = OpenAI::Client.new
     translate = RubyOpenAI::Translate.new(client, model_version("whisper-1"))
     response = translate.get_response(file: input, extension: "rb")
-    puts response
-  end
-
-  desc "moderation", "Moderation API"
-  def moderation
-    puts "Please input your message."
-    input = STDIN.gets.chomp
-    client = OpenAI::Client.new
-    moderation = RubyOpenAI::Moderation.new(client, model_version)
-    response = moderation.get_response(input: input)
     puts response
   end
 
