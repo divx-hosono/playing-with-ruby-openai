@@ -38,10 +38,21 @@ class SampleCLI < Thor
 
   end
 
+  desc "image", "Image API"
+  def image
+    puts "Please input image you wish to generate."
+    input = STDIN.gets.chomp
+    client = OpenAI::Client.new
+    image = RubyOpenAI::Image.new(client, model_version)
+    response = image.get_response(prompt: input)
+    puts response
+  end
+
   desc "moderation", "Moderation API"
   def moderation
     puts "Please input your message."
     input = STDIN.gets.chomp
+    # TODO: 画像サイズの入力等もできるようにする
     client = OpenAI::Client.new
     moderation = RubyOpenAI::Moderation.new(client, model_version)
     response = moderation.get_response(input: input)

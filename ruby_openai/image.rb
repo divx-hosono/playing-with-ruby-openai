@@ -1,6 +1,6 @@
 
 module RubyOpenAI
-  class ImageEdit
+  class Image
     attr_reader :client, :model
 
     def initialize(client, model)
@@ -19,11 +19,8 @@ module RubyOpenAI
 
     def add_parameters(required_params, options)
       parameters = {
-        prompt: required_params[:prompt],
+        prompt: required_params[:prompt]
       }
-      if options[:size].present?
-        parameters[:size] = options[:size]
-      end
     end
   end
 end
