@@ -11,11 +11,10 @@ require_relative './ruby_openai/moderation.rb'
 require_relative './ruby_openai/transcribe.rb'
 require_relative './ruby_openai/translate.rb'
 
-
 class SampleCLI < Thor
   desc "chat", "ChatGPT API"
   def chat
-    puts "Please input your message."
+    prompt_message
     chat_gpt = RubyOpenAI::ChatGPT.new(client, model_version)
     response = chat_gpt.get_response(messages: [{ role: "user", content: input_message}])
     puts response
@@ -23,14 +22,20 @@ class SampleCLI < Thor
 
   desc "completion", "Completion API"
   def completion
-    puts "Please input your message."
+    prompt_message
     completion = RubyOpenAI::Completion.new(client, model_version("text-davinci-001"))
     completion.get_response(prompt: input_message)
     while retry? do
+      prompt_message
       input = input_message
       completion.get_response(prompt: input)
     end
-    after_message
+    thanks_message
+  end
+
+  desc "edit", "Edit API"
+  def edit
+
   end
 
   desc "transcribe", "Transcribe API"
@@ -73,7 +78,11 @@ class SampleCLI < Thor
     model_version = model_version
   end
 
-  def after_message
+  def prompt_message
+    puts "Please input your message."
+  end
+
+  def thanks_message
     puts "Thank you for using our service."
   end
 
@@ -90,6 +99,7 @@ class SampleCLI < Thor
       false
     else
       puts "Please enter y or n."
+      retry?
     end
   end
 end
