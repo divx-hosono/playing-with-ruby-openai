@@ -1,3 +1,4 @@
+require 'thor'
 require_relative './config/openai.rb'
 require_relative './ruby_openai/chat_gpt.rb'
 require_relative './ruby_openai/completion.rb'
@@ -10,14 +11,19 @@ require_relative './ruby_openai/moderation.rb'
 require_relative './ruby_openai/transcribe.rb'
 require_relative './ruby_openai/translate.rb'
 
-# 言語モデルのバージョン
-MODEL_VERSION = "gpt-3.5-turbo"
 
-# ここにユーザーインターフェイスを書く
-client = OpenAI::Client.new
+class SampleCLI < Thor
+  # 言語モデルのバージョン
+  MODEL_VERSION = "gpt-3.5-turbo"
+  @client = OpenAI::Client.new
 
-# CHAT GPTを使用する場合（サンプル）
-chat_gpt = RubyOpenAI::ChatGPT.new(client, MODEL_VERSION)
-response = chat_gpt.get_response(messages: [{ role: "user", content: "Hello!"}])
+  desc "chat", "ChatGPT API"
+  def chat
+    chat_gpt = RubyOpenAI::ChatGPT.new(@client, MODEL_VERSION)
+    chat_gpt.optimization_prompt("Hello, I'm a chatbot")
+    response = chat_gpt.get_response(messages: [{ role: "user", content: "Hello!"}])
+    puts response
+  end
+end
 
-puts response
+SampleCLI.start(ARGV)
