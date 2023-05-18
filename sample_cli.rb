@@ -7,15 +7,20 @@ end
 class SampleCLI < Thor
   desc "chat", "ChatGPT API"
   def chat
+    messages = []
     puts "Please input your message."
     chat_gpt = RubyOpenAI::ChatGPT.new(client, model_version)
-    response = chat_gpt.get_response(messages: [{ role: "user", content: gets_chomp}])
-    puts response
+    input = gets_chomp
+    messages.push({ role: "user", content: input })
+    response = chat_gpt.get_response(messages: messages)
+    puts response["content"]
     while retry? do
       puts "Please input your message."
+      messages.push(response)
       input = gets_chomp
-      response = chat_gpt.get_response(messages: [{ role: "user", content: gets_chomp}])
-      puts response
+      messages.push({ role: "user", content: input })
+      response = chat_gpt.get_response(messages: messages)
+      puts response["content"]
     end
   end
 

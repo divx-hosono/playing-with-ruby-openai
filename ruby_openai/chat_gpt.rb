@@ -11,7 +11,7 @@ module RubyOpenAI
       response = client.chat(
         parameters: add_parameters(required_params, options)
       )
-      response.dig("choices", 0, "message", "content")
+      response.dig("choices", 0, "message")
     end
 
     private
