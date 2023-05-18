@@ -57,6 +57,7 @@ class SampleCLI < Thor
     response_2 = embedding.get_response(input: gets_chomp)
     vector2 = Vector.elements(response_2)
     
+    # ベクトル同士の内積を計算（計算結果の値が1.0に近いほど類似性が高い）
     calc_result = vector2.inner_product(vector1)/(vector1.norm() * vector2.norm())
     puts calc_result
   end
