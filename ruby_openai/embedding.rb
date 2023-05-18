@@ -11,7 +11,7 @@ module RubyOpenAI
     def get_response(required_params, options = {})
       response = client.embeddings(
         parameters: add_parameters(required_params, options)
-      )
+      ).dig("data", 0, "embedding")
     end
 
     private

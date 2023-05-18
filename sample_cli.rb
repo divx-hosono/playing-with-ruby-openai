@@ -1,4 +1,5 @@
 require 'thor'
+require 'matrix'
 require_relative './config/openai.rb'
 Dir[File.expand_path("../ruby_openai", __FILE__) << "/*.rb"].each do |file|
   require file
@@ -46,10 +47,18 @@ class SampleCLI < Thor
 
   desc "embedding", "Embedding API"
   def embedding
-    puts "Please input your message."
     embedding = RubyOpenAI::Embedding.new(client, model_version("text-embedding-ada-002"))
-    response = embedding.get_response(input: gets_chomp)
-    puts response
+
+    puts "Please input your message."
+    response_1= embedding.get_response(input: gets_chomp)
+    vector1 = Vector.elements(response_1, copy = true)
+
+    puts "Please input your message to compare."
+    response_2 = embedding.get_response(input: gets_chomp)
+    vector2 = Vector.elements(response_2, copy = true)
+    
+    calc_result = vector2.inner_product(vector1)/(vector1.norm() * vector2.norm())
+    puts calc_result
   end
 
   desc "file", "File API"
