@@ -51,11 +51,11 @@ class SampleCLI < Thor
 
     puts "Please input your message."
     response_1= embedding.get_response(input: gets_chomp)
-    vector1 = Vector.elements(response_1, copy = true)
+    vector1 = Vector.elements(response_1)
 
     puts "Please input your message to compare."
     response_2 = embedding.get_response(input: gets_chomp)
-    vector2 = Vector.elements(response_2, copy = true)
+    vector2 = Vector.elements(response_2)
     
     calc_result = vector2.inner_product(vector1)/(vector1.norm() * vector2.norm())
     puts calc_result
