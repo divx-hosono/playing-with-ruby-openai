@@ -28,13 +28,9 @@ class SampleCLI < Thor
   def completion
     puts "Please input your message."
     completion = RubyOpenAI::Completion.new(client, model_version("text-davinci-001"))
-    response = completion.get_response(prompt: gets_chomp)
-    while retry? do
-      puts "Please input your message."
-      input = gets_chomp
-      response = completion.get_response(prompt: input)
-      puts response
-    end
+    input = gets_chomp
+    response = completion.get_response(prompt: input)
+    puts input + response.join("")
   end
 
   desc "edit", "Edit API"
