@@ -88,17 +88,12 @@ class SampleCLI < Thor
       response = image.generate(prompt: input)
       puts response
     when "2"
-      # TODO: マスクを入力しないとダメらしい
-      # https://platform.openai.com/docs/guides/images/usage
       puts "Please input image you wish to edit."
       input_prompt = STDIN.gets.chomp
       puts "Please input image file."
-      input_image_file = STDIN.gets.chomp
+      input_image_file = STDIN.gets.chompg
       puts "Please input mask file path, if any."
       input_mask_file = STDIN.gets.chomp
-        if input_mask_file == ""
-          input_mask_file = false
-        end
       client = OpenAI::Client.new
       image = RubyOpenAI::Image.new(client, model_version("babbage-similarity"))
       response = image.edit(prompt: input_prompt, image: input_image_file, mask: input_mask_file)
