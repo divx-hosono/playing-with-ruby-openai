@@ -12,9 +12,6 @@ module RubyOpenAI
         parameters: add_parameters(required_params, options)
       )
       response
-      # TODO: 公式の形と異なるので確認する（公式：JSON.parse(response.body)["id"]）
-      # file_id = response["id"]
-      # file_id
     end
 
     def list
