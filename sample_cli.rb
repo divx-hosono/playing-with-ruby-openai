@@ -97,43 +97,31 @@ class SampleCLI < Thor
   end
 
   desc "image", "Image API"
+  options :generation => :boolean, :edit => :boolean, :variations => :boolean
   def image
-    puts "plese select the image processing you wish to perform"
-    puts "1: Generation"
-    puts "2: Edit"
-    puts "3: Variations"
-    input_processing = STDIN.gets.chomp
-    
-    case input_processing
-    when "1"
+    client = OpenAI::Client.new
+    image = RubyOpenAI::Image.new(client, model_version("babbage-similarity"))
+
+    if options[:generation]
       puts "Please input image you wish to generate."
-      input = STDIN.gets.chomp
-      client = OpenAI::Client.new
-      image = RubyOpenAI::Image.new(client, model_version("babbage-similarity"))
-      response = image.generate(prompt: input)
+      response = image.generate(prompt: gets_chomp)
       puts response
-    when "2"
+    elsif options[:edit]
       puts "Please input image you wish to edit."
-      input_prompt = STDIN.gets.chomp
+      input_prompt = gets_chomp
       puts "Please input image file."
-      input_image_file = STDIN.gets.chompg
-      puts "Please input mask file path, if any."
-      input_mask_file = STDIN.gets.chomp
-      client = OpenAI::Client.new
-      image = RubyOpenAI::Image.new(client, model_version("babbage-similarity"))
+      input_image_file = gets_chomp
+      puts "Please input mask file."
+      input_mask_file = gets_chomp
       response = image.edit(prompt: input_prompt, image: input_image_file, mask: input_mask_file)
       puts response
-    when "3"
+    elsif options[:variations]
       puts "Please input image file."
-      input_image_file = STDIN.gets.chomp
+      input_image_file = gets_chomp
       puts "Please input the number of images you wish to generate."
-      input_number = STDIN.gets.chomp.to_i
-      client = OpenAI::Client.new
-      image = RubyOpenAI::Image.new(client, model_version("babbage-similarity"))
+      input_number = gets_chomp.to_i
       response = image.variations(image: input_image_file, n: input_number)
       puts response
-    else
-      puts "Please input 1, 2 or 3."
     end
   end
 
