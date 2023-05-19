@@ -128,12 +128,14 @@ class SampleCLI < Thor
   desc "moderation", "Moderation API"
   def moderation
     puts "Please input your message."
-    input = STDIN.gets.chomp
-    # TODO: 画像サイズの入力等もできるようにする
     client = OpenAI::Client.new
     moderation = RubyOpenAI::Moderation.new(client, model_version)
-    response = moderation.get_response(input: input)
-    puts response
+    response = moderation.get_response(input: gets_chomp)
+    if response
+      puts "This message violates policy."
+    else
+      puts "This message does not violate policy."
+    end
   end
 
   desc "transcribe", "Transcribe API"

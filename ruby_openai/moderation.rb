@@ -11,7 +11,7 @@ module RubyOpenAI
       response = client.moderations(
         parameters: add_parameters(required_params, options)
       )
-      response.dig("results", 0, "category_scores", "hate")
+      response.dig("results", 0, "flagged")
     end
 
     private
