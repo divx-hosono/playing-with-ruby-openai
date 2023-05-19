@@ -87,13 +87,36 @@ class SampleCLI < Thor
   end
 
   desc "finetune", "FineTune API"
+  options :upload => :boolean, :create => :boolean, :cancel => :boolean, :list => :boolean, :retrieve => :boolean, :completions => :boolean, :delete => :boolean
   def finetune
-    puts "Please input the path to the json file for fine tuning."
-    input = STDIN.gets.chomp
     client = OpenAI::Client.new
     finetune = RubyOpenAI::FineTune.new(client, model_version("ada"))
-    response = finetune.get_response(file: input, purpose: "fine-tune")
-    puts response
+
+    if options[:upload]
+      puts "Please input the path to the json file for fine tuning."
+      response = finetune.get_response(file: gets_chomp, purpose: "fine-tune")
+      puts response
+    elsif options[:create]
+      puts "Please input file id."
+      puts finetune.create(gets_chomp)
+    elsif options[:cancel]
+      puts "Please input fine tune id."
+      puts finetune.cancel(gets_chomp)
+    elsif options[:list]
+      puts finetune.list
+    elsif options[:retrieve]
+      puts "Please input fine tune id."
+      puts finetune.retrieve(gets_chomp)
+    elsif options[:completions]
+      puts "Please input fine tuned model."
+      fine_tuned_model = gets_chomp
+      puts "Please input your message."
+      prompt = gets_chomp
+      puts finetune.completions(fine_tuned_model: fine_tuned_model, prompt: prompt)
+    elsif options[:delete]
+      puts "Please input fine tuned model."
+      puts finetune.delete(gets_chomp)
+    end
   end
 
   desc "image", "Image API"
