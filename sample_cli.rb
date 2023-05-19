@@ -1,5 +1,6 @@
 require 'thor'
 require 'matrix'
+require 'debug'
 require_relative './config/openai.rb'
 Dir[File.expand_path("../ruby_openai", __FILE__) << "/*.rb"].each do |file|
   require file
@@ -63,13 +64,26 @@ class SampleCLI < Thor
   end
 
   desc "file", "File API"
+  options :upload => :boolean, :list => :boolean, :retrieve => :boolean, :content => :boolean, :delete => :boolean
   def file
-    puts "Please input the path to the json file."
-    input = STDIN.gets.chomp
     client = OpenAI::Client.new
     file = RubyOpenAI::File.new(client, model_version("ada"))
-    response = file.get_response(file: input, purpose: "fine-tune")
-    puts response
+    if options[:upload]
+      puts "Please input the path to the json file."
+      response = file.get_response(file: gets_chomp, purpose: "fine-tune")
+      puts response
+    elsif options[:list]
+      puts file.list
+    elsif options[:retrieve]
+      puts "Please input file id."
+      puts file.retrieve(gets_chomp)
+    elsif options[:content]
+      puts "Please input file id."
+      puts file.content(gets_chomp)
+    elsif options[:delete]
+      puts "Please input file id."
+      puts file.delete(gets_chomp)
+    end
   end
 
   desc "finetune", "FineTune API"
