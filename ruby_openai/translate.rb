@@ -19,7 +19,6 @@ module RubyOpenAI
     def add_parameters(required_params, options)
       parameters = {
         model: self.model,
-        # トップレベルの指定をしないと、RubyOpenAI::Fileクラスにopenメソッドがない?と言われる
         file: ::File.open(required_params[:file], required_params[:extension])
       }
     end
