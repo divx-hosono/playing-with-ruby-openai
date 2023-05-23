@@ -161,21 +161,21 @@ class SampleCLI < Thor
     end
   end
 
-  desc "transcribe", "Transcribe API"
-  def transcribe
-    puts "Please input audio file path."
-    client = OpenAI::Client.new
-    transcribe = RubyOpenAI::Transcribe.new(client, model_version("whisper-1"))
-    response = transcribe.get_response(file: gets_chomp, extension: "rb")
-    puts response
-  end
-
   desc "translate", "Translate API"
   def translate
     puts "Please input audio file path."
     client = OpenAI::Client.new
     translate = RubyOpenAI::Translate.new(client, model_version("whisper-1"))
     response = translate.get_response(file: gets_chomp, extension: "rb")
+    puts response
+  end
+
+  desc "transcribe", "Transcribe API"
+  def transcribe
+    puts "Please input audio file path."
+    client = OpenAI::Client.new
+    transcribe = RubyOpenAI::Transcribe.new(client, model_version("whisper-1"))
+    response = transcribe.get_response(file: gets_chomp, extension: "rb")
     puts response
   end
 
