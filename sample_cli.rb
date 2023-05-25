@@ -1,6 +1,6 @@
 require 'thor'
 require 'matrix'
-require 'debug'
+
 require_relative './config/openai.rb'
 Dir[File.expand_path("../ruby_openai", __FILE__) << "/*.rb"].each do |file|
   require file
