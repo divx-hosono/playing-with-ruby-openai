@@ -15,11 +15,9 @@ class SampleCLI < Thor
       puts "Please input your message."
       puts "If you want to exit, please input 'exit'."
       input = gets_chomp
-      if input != "exit"
-        messages.push({ role: "user", content: input })
-        response = chat_gpt.get_response(messages: messages)
-      end
-      # Warn: 繰り返し質問を行った際に、undefined method `[]' for nil:NilClass (NoMethodError)が発生することがある
+      return if input == "exit"
+      messages.push({ role: "user", content: input })
+      response = chat_gpt.get_response(messages: messages)
       puts response["content"]
     end
   end
