@@ -1,6 +1,5 @@
 require 'thor'
 require 'matrix'
-
 require_relative './config/openai.rb'
 Dir[File.expand_path("../ruby_openai", __FILE__) << "/*.rb"].each do |file|
   require file
@@ -10,18 +9,17 @@ class SampleCLI < Thor
   desc "chat", "ChatGPT API"
   def chat
     messages = []
-    puts "Please input your message."
     chat_gpt = RubyOpenAI::ChatGPT.new(client, model_version)
-    input = gets_chomp
-    messages.push({ role: "user", content: input })
-    response = chat_gpt.get_response(messages: messages)
-    puts response["content"]
-    while retry? do
+    input = ""
+    while input != "exit" do
       puts "Please input your message."
-      messages.push(response)
+      puts "If you want to exit, please input 'exit'."
       input = gets_chomp
-      messages.push({ role: "user", content: input })
-      response = chat_gpt.get_response(messages: messages)
+      if input != "exit"
+        messages.push({ role: "user", content: input })
+        response = chat_gpt.get_response(messages: messages)
+      end
+      # Warn: 繰り返し質問を行った際に、undefined method `[]' for nil:NilClass (NoMethodError)が発生することがある
       puts response["content"]
     end
   end
@@ -192,21 +190,12 @@ class SampleCLI < Thor
   def gets_chomp
     STDIN.gets.chomp
   end
-
-  def retry?
-    puts "Would you like to try again? (y/n)"
-    case gets_chomp
-    when "y"
-      true
-    when "n"
-      false
-    else
-      puts "Please enter y or n."
-      retry?
-    end
-  end
 end
 
+puts "---------------------------------"
 puts "Welcome to Sample CLI."
+puts "---------------------------------"
 SampleCLI.start(ARGV)
+puts "---------------------------------"
 puts "Thank you for using our service."
+puts "---------------------------------"
