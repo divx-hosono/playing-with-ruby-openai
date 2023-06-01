@@ -1,5 +1,6 @@
 require 'thor'
 require 'matrix'
+
 require_relative './config/openai.rb'
 Dir[File.expand_path("../ruby_openai", __FILE__) << "/*.rb"].each do |file|
   require file
@@ -127,11 +128,12 @@ class SampleCLI < Thor
     client = OpenAI::Client.new
     image = RubyOpenAI::Image.new(client, model_version("babbage-similarity"))
 
-    if options[:generation]
+    case options.keys.join("")
+    when "generation"
       puts "Please input image you wish to generate."
       response = image.generate(prompt: gets_chomp)
       puts response
-    elsif options[:edit]
+    when "edit"
       puts "Please input image you wish to edit."
       input_prompt = gets_chomp
       puts "Please input image file."
@@ -140,7 +142,7 @@ class SampleCLI < Thor
       input_mask_file = gets_chomp
       response = image.edit(prompt: input_prompt, image: input_image_file, mask: input_mask_file)
       puts response
-    elsif options[:variations]
+    when "variations"
       puts "Please input image file."
       input_image_file = gets_chomp
       puts "Please input the number of images you wish to generate."
