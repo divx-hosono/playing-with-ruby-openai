@@ -17,8 +17,13 @@ class SampleCLI < Thor
       input = gets_chomp
       return if input == "exit"
       messages.push({ role: "user", content: input })
-      response = chat_gpt.get_response(messages: messages)
-      puts response["content"]
+      begin
+        response = chat_gpt.get_response(messages: messages)
+        puts response["content"]
+      rescue
+        puts "Sorry, An unexpected error has occurred."
+        puts "Please try again after 20sec."
+      end
     end
   end
 
@@ -88,28 +93,29 @@ class SampleCLI < Thor
     client = OpenAI::Client.new
     finetune = RubyOpenAI::FineTune.new(client, model_version("ada"))
 
-    if options[:upload]
+    case options.keys.join("")
+    when "upload"
       puts "Please input the path to the json file for fine tuning."
       response = finetune.get_response(file: gets_chomp, purpose: "fine-tune")
       puts response
-    elsif options[:create]
+    when "create"
       puts "Please input file id."
       puts finetune.create(gets_chomp)
-    elsif options[:cancel]
+    when "cancel"
       puts "Please input fine tune id."
       puts finetune.cancel(gets_chomp)
-    elsif options[:list]
+    when "list"
       puts finetune.list
-    elsif options[:retrieve]
+    when "retrieve"
       puts "Please input fine tune id."
       puts finetune.retrieve(gets_chomp)
-    elsif options[:completions]
+    when "completions"
       puts "Please input fine tuned model."
       fine_tuned_model = gets_chomp
       puts "Please input your message."
       prompt = gets_chomp
       puts finetune.completions(fine_tuned_model: fine_tuned_model, prompt: prompt)
-    elsif options[:delete]
+    when "delete"
       puts "Please input fine tuned model."
       puts finetune.delete(gets_chomp)
     end
