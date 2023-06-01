@@ -70,19 +70,20 @@ class SampleCLI < Thor
   def file
     client = OpenAI::Client.new
     file = RubyOpenAI::File.new(client, model_version("ada"))
-    if options[:upload]
+    case options.keys.join("")
+    when "upload"
       puts "Please input the path to the json file."
       response = file.get_response(file: gets_chomp, purpose: "fine-tune")
       puts response
-    elsif options[:list]
+    when "list"
       puts file.list
-    elsif options[:retrieve]
+    when "retrieve"
       puts "Please input file id."
       puts file.retrieve(gets_chomp)
-    elsif options[:content]
+    when "content"
       puts "Please input file id."
       puts file.content(gets_chomp)
-    elsif options[:delete]
+    when "delete"
       puts "Please input file id."
       puts file.delete(gets_chomp)
     end
